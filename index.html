@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Sudipta Chakraborty - Product and AI leader. Agentic AI, RAG, evaluation and guardrails in production.">
+<title>Sudipta Chakraborty — AI Work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column of case studies, each a "decision record" with a mechanism figure (flow, trace, table) beside the prose on wide screens. */
+:root{
+  --bg:#f5f7f8; --surface:#ffffff; --ink:#14233a; --muted:#56657a; --line:#d9e0e7;
+  --accent:#0f7c78; --accent-soft:#e2f1f0; --warm:#b7651b; --warm-soft:#fbefe2;
+  --code-bg:#0f1b2d; --code-fg:#d6e2f0; --code-dim:#7f93ad; --ok:#2f8f5b; --warn:#b7651b; --stop:#b4423b;
+  --f-display:"Schibsted Grotesk","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1522; --surface:#122033; --ink:#e6edf5; --muted:#9aabbf; --line:#24364d;
+  --accent:#43c2b9; --accent-soft:#123534; --warm:#e79a52; --warm-soft:#3a2614;
+  --code-bg:#07101b; --code-fg:#d6e2f0; --code-dim:#7088a6; --ok:#5cc58a; --warn:#e79a52; --stop:#e27a72; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1522; --surface:#122033; --ink:#e6edf5; --muted:#9aabbf; --line:#24364d;
+  --accent:#43c2b9; --accent-soft:#123534; --warm:#e79a52; --warm-soft:#3a2614;
+  --code-bg:#07101b; --code-fg:#d6e2f0; --code-dim:#7088a6; --ok:#5cc58a; --warn:#e79a52; --stop:#e27a72; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+
+/* hero */
+header.hero{padding-block:64px 40px;display:grid;gap:28px;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(34px,6vw,60px);font-weight:800;letter-spacing:-.02em;max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .lede{font-size:18px;color:var(--muted);max-width:62ch}
+.who{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;font-size:15px}
+.who strong{font-family:var(--f-display);font-size:18px}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.fact{background:var(--surface);padding:16px 18px;display:grid;gap:2px}
+.fact b{font-family:var(--f-display);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.fact span{font-size:13px;color:var(--muted)}
+.contact{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:14px}
+.chip{font-family:var(--f-mono);font-size:13px;background:var(--surface);border:1px solid var(--line);padding:6px 10px;border-radius:6px;user-select:all}
+button.copy{font:500 13px var(--f-body);background:var(--ink);color:var(--bg);border:0;border-radius:6px;padding:7px 12px;cursor:pointer}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px}
+nav.toc a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)}
+nav.toc a:hover{color:var(--accent);border-color:var(--accent)}
+
+/* case studies */
+section.case{padding-block:56px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:40px;align-items:start}
+section.case.full{grid-template-columns:minmax(0,1fr)}
+.case .text{display:grid;gap:16px;min-width:0}
+.case h2{font-size:clamp(24px,3.2vw,32px);font-weight:700}
+.case .problem{color:var(--muted)}
+.decisions{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.decisions li{padding-left:22px;position:relative}
+.decisions li::before{content:"";position:absolute;left:0;top:.62em;width:10px;height:2px;background:var(--accent)}
+.decisions b{font-weight:600}
+.figure{min-width:0;display:grid;gap:10px}
+.figcap{font-size:13px;color:var(--muted)}
+
+/* flow diagram */
+.flow{display:grid;gap:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.node{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:baseline;padding:10px 12px;border-radius:8px}
+.node .k{font-family:var(--f-mono);font-size:12px;color:var(--accent);min-width:4.5ch}
+.node .t{font-weight:600}
+.node .d{grid-column:2;font-size:14px;color:var(--muted)}
+.node.gate{background:var(--warm-soft)}
+.node.gate .k{color:var(--warm)}
+.arrow{height:18px;margin-left:30px;border-left:2px dashed var(--line)}
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.branch .node{border:1px solid var(--line)}
+
+/* trace */
+.trace{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:18px;font-family:var(--f-mono);font-size:13px;line-height:1.7;overflow-x:auto}
+.trace .ln{display:grid;grid-template-columns:5.5ch 10ch minmax(0,1fr);gap:10px;white-space:pre-wrap}
+.trace .ts{color:var(--code-dim)}
+.trace .st{color:#7fd3cc}
+.trace .gt{color:#f0b27a}
+.trace .ok{color:#86d9a5}
+.trace .src{color:var(--code-dim)}
+@media (prefers-reduced-motion:no-preference){
+  .trace .ln{animation:rise .5s ease both}
+  .trace .ln:nth-child(2){animation-delay:.08s}.trace .ln:nth-child(3){animation-delay:.16s}.trace .ln:nth-child(4){animation-delay:.24s}
+  .trace .ln:nth-child(5){animation-delay:.32s}.trace .ln:nth-child(6){animation-delay:.4s}.trace .ln:nth-child(7){animation-delay:.48s}.trace .ln:nth-child(8){animation-delay:.56s}
+  @keyframes rise{from{transform:translateY(4px);opacity:.35}to{transform:none;opacity:1}}
+}
+
+/* tables */
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap}
+.pill{display:inline-block;font-family:var(--f-mono);font-size:11.5px;padding:2px 8px;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
+.pill.ok{color:var(--ok)}.pill.warn{color:var(--warn)}.pill.stop{color:var(--stop)}
+
+/* tiers */
+.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tier{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:8px;padding:14px;display:grid;gap:6px;align-content:start}
+.tier h3{font-size:16px}
+.tier p{font-size:14px;color:var(--muted)}
+.tier .ex{font-family:var(--f-mono);font-size:12px;color:var(--ink)}
+
+/* stages */
+.stages{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;counter-reset:s}
+.stages li{counter-increment:s;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:6px;align-content:start;font-size:14px}
+.stages li::before{content:"Stage " counter(s);font-family:var(--f-mono);font-size:11.5px;color:var(--accent);letter-spacing:.05em;text-transform:uppercase}
+.stages b{font-family:var(--f-display);font-size:16px}
+.stages span{color:var(--muted)}
+
+/* werize concept */
+section.concept{padding-block:64px;display:grid;gap:28px}
+.concept-head{display:grid;gap:12px;max-width:70ch}
+.concept-head h2{font-size:clamp(26px,3.6vw,38px);font-weight:800}
+.tag{justify-self:start;font-family:var(--f-mono);font-size:12px;background:var(--warm-soft);color:var(--warm);padding:4px 10px;border-radius:99px}
+.hub{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1fr);gap:14px;align-items:center}
+.agents{display:grid;gap:10px}
+.agent{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:grid;gap:3px}
+.agent b{font-size:15px}
+.agent span{font-size:13.5px;color:var(--muted)}
+.advisor{background:var(--ink);color:var(--bg);border-radius:14px;padding:24px;display:grid;gap:10px;text-align:left}
+.advisor h3{font-size:22px}
+.advisor p{font-size:14.5px;opacity:.85}
+.advisor .rule{font-family:var(--f-mono);font-size:12.5px;border-top:1px solid color-mix(in srgb,var(--bg) 30%,transparent);padding-top:10px}
+.mapping{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.map{border-left:3px solid var(--accent);padding:4px 0 4px 14px;display:grid;gap:4px}
+.map b{font-family:var(--f-display)}
+.map span{font-size:14.5px;color:var(--muted)}
+
+footer{padding-block:40px 56px;display:grid;gap:14px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+footer h2{font-size:24px;color:var(--ink)}
+
+@media (max-width:860px){
+  section.case{grid-template-columns:minmax(0,1fr);gap:24px}
+  .stages{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hub{grid-template-columns:minmax(0,1fr)}
+  .advisor{order:-1}
+}
+@media (max-width:560px){
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tiers,.mapping,.branch{grid-template-columns:minmax(0,1fr)}
+  .stages{grid-template-columns:minmax(0,1fr)}
+  header.hero{padding-block:40px 32px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="hero">
+  <div class="who"><strong>Sudipta Chakraborty</strong><span>Product &amp; AI Leader · Kolkata, open to Bengaluru</span></div>
+  <h1>I ship AI that people <em>trust enough to use every day.</em></h1>
+  <p class="lede">23 years in technology leadership, the last two and a half owning the AI agenda at HCLTech. This page walks through the AI systems I have built: an agentic workflow in live daily use, retrieval with source traceability, the evaluation and guardrails that keep it honest, and the Centre of Excellence that takes ideas to production.</p>
+  <div class="facts" role="list">
+    <div class="fact" role="listitem"><b>23 yrs</b><span>Technology leadership</span></div>
+    <div class="fact" role="listitem"><b>Live</b><span>Agentic AI in daily use</span></div>
+    <div class="fact" role="listitem"><b>400+</b><span>People led</span></div>
+    <div class="fact" role="listitem"><b>$70M+</b><span>Portfolio managed</span></div>
+  </div>
+  <div class="contact">
+    <span class="chip" id="email">sudipta.chakraborty@gmail.com</span>
+    <button class="copy" id="copyBtn" type="button">Copy email</button>
+    <span class="chip">+91-9830993510</span>
+    <a href="https://www.linkedin.com/in/sudipta-chakraborty-095603144" target="_blank" rel="noopener">LinkedIn profile</a>
+  </div>
+  <nav class="toc" aria-label="Sections">
+    <a href="#agentic">Agentic AI</a><a href="#rag">RAG &amp; grounding</a><a href="#eval">Evaluation</a><a href="#guardrails">Guardrails</a><a href="#models">Model choice</a><a href="#coe">AI CoE</a><a href="#advisor">Advisor agents concept</a>
+  </nav>
+</header>
+
+<section class="case" id="agentic">
+  <div class="text">
+    <span class="eyebrow">Case study · Agentic AI</span>
+    <h2>An agentic system, from concept to live daily use</h2>
+    <p class="problem">Delivery teams spent hours each week assembling status reports, chasing anomalies across systems and pulling context from scattered documents. The goal was an agent that does the multi-step legwork and hands a person something they can act on.</p>
+    <ul class="decisions">
+      <li><b>Task decomposition.</b> A planner breaks a request into steps, so each step can be checked and retried on its own.</li>
+      <li><b>Tool and system calls.</b> Agents call enterprise systems and internal content through defined tools, not free-form access.</li>
+      <li><b>State across runs.</b> Each multi-step run keeps its own state, so a partial failure does not restart everything.</li>
+      <li><b>Designed failure paths.</b> When a step returns nothing usable, the agent says so and escalates. It does not fill the gap with a guess.</li>
+      <li><b>Outcome.</b> In live daily use across delivery operations for automated reporting, anomaly detection and delivery intelligence.</li>
+    </ul>
+  </div>
+  <div class="figure">
+    <div class="trace" aria-label="Illustrative agent run trace">
+      <div class="ln"><span class="ts">00.0s</span><span class="st">request</span><span>"Weekly status for programme A, flag risks"</span></div>
+      <div class="ln"><span class="ts">00.4s</span><span class="st">plan</span><span>4 steps: fetch metrics → detect anomalies → retrieve context → draft</span></div>
+      <div class="ln"><span class="ts">02.1s</span><span class="st">tool</span><span>delivery_metrics.get(programme=A, window=7d)</span></div>
+      <div class="ln"><span class="ts">03.0s</span><span class="st">ml</span><span>anomaly model: 2 outliers in effort burn</span></div>
+      <div class="ln"><span class="ts">04.6s</span><span class="st">retrieve</span><span>3 passages <span class="src">[minutes_0412 §2] [raid_log r17] [sow §5.1]</span></span></div>
+      <div class="ln"><span class="ts">06.2s</span><span class="st">draft</span><span>report with every claim linked to a source</span></div>
+      <div class="ln"><span class="ts">06.5s</span><span class="gt">validate</span><span>risk flag on client-facing text → route to human review</span></div>
+      <div class="ln"><span class="ts">—</span><span class="ok">approved</span><span>owner edits one line, sends</span></div>
+    </div>
+    <p class="figcap">Illustrative shape of one run. Step names and timings are representative, not production logs.</p>
+  </div>
+</section>
+
+<section class="case" id="rag">
+  <div class="text">
+    <span class="eyebrow">Case study · Retrieval</span>
+    <h2>RAG where every answer shows its source</h2>
+    <p class="problem">Business users would not act on an answer they could not check, and auditors would not accept one. Grounding was the product requirement, not a feature.</p>
+    <ul class="decisions">
+      <li><b>Ingestion and chunking</b> tuned to how the documents are written (minutes, logs, contracts), so a retrieved passage carries enough context to stand alone.</li>
+      <li><b>Retrieval quality</b> measured with its own test set, separate from answer quality, so a bad answer can be traced to the stage that caused it.</li>
+      <li><b>Grounded generation.</b> The model answers only from retrieved passages and cites each one. No passage, no claim.</li>
+      <li><b>Access-aware retrieval.</b> Users only retrieve what they are already allowed to read.</li>
+    </ul>
+  </div>
+  <div class="figure">
+    <div class="flow">
+      <div class="node"><span class="k">ingest</span><span class="t">Enterprise content</span><span class="d">Documents and emails, classified and tagged with access rules</span></div>
+      <div class="arrow"></div>
+      <div class="node"><span class="k">chunk</span><span class="t">Structure-aware chunking</span><span class="d">Split by section, keep titles and dates as metadata</span></div>
+      <div class="arrow"></div>
+      <div class="node"><span class="k">retrieve</span><span class="t">Permission-filtered search</span><span class="d">Top passages for the question, filtered by the user's access</span></div>
+      <div class="arrow"></div>
+      <div class="node"><span class="k">generate</span><span class="t">Answer from passages only</span><span class="d">Each statement cites its passage</span></div>
+      <div class="arrow"></div>
+      <div class="node gate"><span class="k">check</span><span class="t">Grounding check</span><span class="d">Uncited or unsupported statements are removed or flagged before the user sees them</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="case full" id="eval">
+  <div class="text">
+    <span class="eyebrow">Case study · Evaluation and monitoring</span>
+    <h2>Testing before release, monitoring after</h2>
+    <p class="problem">I built the evaluation practice in the AI CoE: task-level test sets, accuracy and grounding checks, and regression tests that run before every release. In production, each signal has a defined threshold and a defined response.</p>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Signal</th><th>What it catches</th><th>When the threshold is breached</th></tr></thead>
+      <tbody>
+        <tr><td>Accuracy</td><td>Task outputs that disagree with the test set or with reviewer corrections</td><td><span class="pill warn">review</span> then <span class="pill stop">rollback</span> if it persists</td></tr>
+        <tr><td>Hallucination</td><td>Statements without a supporting source passage</td><td><span class="pill stop">block output</span> and open a review</td></tr>
+        <tr><td>Drift</td><td>Changes in inputs or outputs against the release baseline</td><td><span class="pill warn">review</span> and re-run the evaluation suite</td></tr>
+        <tr><td>Exception rate</td><td>Steps that fail, time out or escalate to a human</td><td><span class="pill warn">review</span> the failing step and tools</td></tr>
+        <tr><td>Active usage</td><td>Whether people keep using it and for which tasks</td><td><span class="pill ok">adoption plan</span> with champions and enablement</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="case full" id="guardrails">
+  <div class="text">
+    <span class="eyebrow">Case study · Guardrails</span>
+    <h2>Human review placed by risk, not everywhere</h2>
+    <p class="problem">Reviewing every output kills adoption. Reviewing none loses trust. I place checkpoints by the cost of a wrong answer, validate outputs before any downstream action, and give every tier a clear escalation path.</p>
+  </div>
+  <div class="tiers">
+    <div class="tier" style="--c:var(--ok)"><h3>Low risk</h3><p>Internal, reversible, informational output. Ships automatically with sources shown.</p><span class="ex">e.g. internal summaries</span></div>
+    <div class="tier" style="--c:var(--warn)"><h3>Medium risk</h3><p>Output that others will rely on. Validated automatically and sampled for human review.</p><span class="ex">e.g. anomaly alerts</span></div>
+    <div class="tier" style="--c:var(--stop)"><h3>High risk</h3><p>Client-facing, financial or irreversible. A named person approves before anything happens.</p><span class="ex">e.g. client reports, actions in systems</span></div>
+  </div>
+</section>
+
+<section class="case full" id="models">
+  <div class="text">
+    <span class="eyebrow">Practice · Model and platform choice</span>
+    <h2>The right technique for each job</h2>
+    <p class="problem">Not every problem needs an LLM. I choose per use case and weigh capability against cost per task, latency and where it has to run, including on-premise and air-gapped settings.</p>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Technique</th><th>Where I use it</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Generative AI / LLMs</td><td>Drafting, summarising, answering questions over documents, orchestrating agents</td><td>Handles unstructured language; needs grounding and evaluation</td></tr>
+        <tr><td>Classical ML</td><td>Anomaly detection, classification</td><td>Cheap, fast and explainable on structured data</td></tr>
+        <tr><td>Predictive analytics</td><td>Forecasting effort, risk and delivery outcomes</td><td>Numbers people can plan against</td></tr>
+        <tr><td>Rules and automation</td><td>Fixed policies, routing, data extraction with Python</td><td>Deterministic where the answer must never vary</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="case full" id="coe">
+  <div class="text">
+    <span class="eyebrow">Building the team · AI Centre of Excellence</span>
+    <h2>A standard path from idea to production</h2>
+    <p class="problem">I set up and lead the AI CoE: reusable accelerators, integration patterns, prompt libraries and evaluation test sets, with governance built in. Every use case moves through the same stages.</p>
+  </div>
+  <ol class="stages">
+    <li><b>Discover</b><span>Score use cases with business owners on value, data readiness, risk, regulatory exposure and time to impact.</span></li>
+    <li><b>Prove</b><span>Build on reusable components. Define the test set before the prototype.</span></li>
+    <li><b>Approve</b><span>Governance gate: owner, data privacy, access control, documentation.</span></li>
+    <li><b>Launch</b><span>Treat it as a product launch: sponsors, champions and training on real scenarios.</span></li>
+    <li><b>Measure</b><span>Track usage, accuracy and realised benefit against the original business case.</span></li>
+  </ol>
+</section>
+
+<section class="concept" id="advisor">
+  <div class="concept-head">
+    <span class="tag">My concept for WeRize · not built yet</span>
+    <h2>A team of AI agents for every local advisor</h2>
+    <p class="problem">Financial decisions in Middle India run on trust in a person. The agents should make that person faster and better informed, and never replace them. This is how I would apply the patterns above.</p>
+  </div>
+  <div class="hub">
+    <div class="agents">
+      <div class="agent"><b>Community agent</b><span>Finds who in the neighbourhood needs a follow-up today and why</span></div>
+      <div class="agent"><b>Credit pre-check agent</b><span>Gathers documents and runs eligibility checks before the advisor visits</span></div>
+      <div class="agent"><b>Explainer agent</b><span>Explains a loan, policy or fund in the customer's language, with the source terms attached</span></div>
+    </div>
+    <div class="advisor">
+      <span class="eyebrow" style="color:inherit;opacity:.7">At the centre</span>
+      <h3>The advisor decides</h3>
+      <p>Agents prepare, draft and remind. The advisor reviews and acts, and the customer deals with someone they know.</p>
+      <p class="rule">Any money movement, credit decision or product sale needs the advisor's approval.</p>
+    </div>
+    <div class="agents">
+      <div class="agent"><b>Insurance needs agent</b><span>Spots gaps in cover from life events the customer has shared</span></div>
+      <div class="agent"><b>Investment follow-up agent</b><span>Tracks SIP renewals and nudges at the right time</span></div>
+      <div class="agent"><b>Compliance agent</b><span>Checks every recommendation and message against product rules and consent</span></div>
+    </div>
+  </div>
+  <div class="mapping">
+    <div class="map"><b>Grounding becomes explainable advice</b><span>Every suggestion to an advisor shows the product terms and customer data it came from.</span></div>
+    <div class="map"><b>Risk tiers become advisor approvals</b><span>Reminders can go out automatically. Credit and investment actions wait for the advisor.</span></div>
+    <div class="map"><b>Evaluation becomes per-agent metrics</b><span>Accuracy, exception rate and advisor acceptance rate for each agent, tracked weekly.</span></div>
+    <div class="map"><b>Data foundation becomes consent by design</b><span>DPDP-aware consent, access control and lineage from the first release.</span></div>
+  </div>
+</section>
+
+<footer>
+  <h2>Let's talk</h2>
+  <p>Sudipta Chakraborty · sudipta.chakraborty@gmail.com · +91-9830993510 · Kolkata, open to relocating to Bengaluru</p>
+  <p>Work described here was done at HCLTech (2024 to present). Client names and production data are left out.</p>
+</footer>
+</div>
+
+<script>
+document.getElementById('copyBtn').addEventListener('click',function(){
+  var b=this,t=document.getElementById('email').textContent;
+  var done=function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy email'},1600)};
+  var fallback=function(){var r=document.createRange();r.selectNodeContents(document.getElementById('email'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected, press Ctrl+C'};
+  try{navigator.clipboard.writeText(t).then(done,fallback)}catch(e){fallback()}
+});
+</script>
+</body>
+</html>
